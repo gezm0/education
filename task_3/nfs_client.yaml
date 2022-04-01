@@ -1,0 +1,24 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nfs-client-pod
+  labels:
+    name: nfs-client-pod
+spec:
+
+  volumes:
+    - name: nfs-volume
+      nfs:
+        server: 10.108.48.153
+        path: /
+
+  containers:
+  - name: app
+    image: alpine
+
+    volumeMounts:
+      - mountPath: /var/nfs
+        name: nfs-volume
+
+    command: ["/bin/sh"]
+    args: ["-c", "while true; do date >> /var/nfs/dates.txt; sleep 5; done"]
