@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: deploy-emptydir
+spec:
+  selector:
+    matchLabels:
+      app: deploy-emptydir
+  template:
+    metadata:
+      labels:
+        app: deploy-emptydir
+    spec:
+      volumes:
+        - name: sample-volume
+          emptyDir:
+            {}
+      containers:
+      - name: deploy-emptydir
+        image: alpine
+        volumeMounts:
+          - mountPath: /var/sample
+            name: sample-volume
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+        command: ["/bin/sh"]
+        args: ["-c", "while true; do date >> /var/sample/file.txt; sleep 5; done"]
